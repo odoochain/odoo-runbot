@@ -7,10 +7,11 @@ import os
 import pathlib
 import pprint
 import textwrap
+from urllib.parse import urlencode
+
 import unicodedata
 
 import requests
-import werkzeug.urls
 
 import odoo.netsvc
 from odoo.tools import topological_sort, config
@@ -90,7 +91,7 @@ class GH(object):
             self=self,
             # requests data
             method=method, path=path,
-            qs='' if not params else ('?' + werkzeug.urls.url_encode(params)),
+            qs='' if not params else ('?' + urlencode(params)),
             body=utils.shorten(body.strip(), 400),
             # response data
             r=response,

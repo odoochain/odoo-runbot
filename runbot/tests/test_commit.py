@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import datetime
 from unittest.mock import patch
-from werkzeug.urls import url_parse
+from urllib.parse import urlparse
 
 from odoo.tests.common import HttpCase, new_test_user, tagged
 from odoo.tools import mute_logger
@@ -55,7 +55,7 @@ class TestCommitStatus(HttpCase):
 
             # 1. test that unauthenticated users are redirected to the login page
             response = self.url_open('/runbot/commit/resend/%s' % commit_status.id)
-            parsed_response = url_parse(response.url)
+            parsed_response = urlparse(response.url)
             self.assertIn('redirect=', parsed_response.query)
             self.assertEqual(parsed_response.path, '/web/login')
 

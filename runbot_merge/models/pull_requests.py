@@ -16,9 +16,9 @@ import time
 
 from difflib import Differ
 from itertools import takewhile
+from urllib.parse import urlparse, quote
 
 import requests
-import werkzeug
 from werkzeug.datastructures import Headers
 
 from odoo import api, fields, models, tools
@@ -588,10 +588,10 @@ class PullRequests(models.Model):
 
     @api.depends('repository.name', 'number')
     def _compute_url(self):
-        base = werkzeug.urls.url_parse(self.env['ir.config_parameter'].sudo().get_param('web.base.url', 'http://localhost:8069'))
-        gh_base = werkzeug.urls.url_parse('https://github.com')
+        base = urlparse(self.env['ir.config_parameter'].sudo().get_param('web.base.url', 'http://localhost:8069'))
+        gh_base = urlparse('https://github.com')
         for pr in self:
-            path = f'/{werkzeug.urls.url_quote(pr.repository.name)}/pull/{pr.number}'
+            path = f'/{quote(pr.repository.name)}/pull/{pr.number}'
             pr.url = str(base.join(path))
             pr.github_url = str(gh_base.join(path))
 
